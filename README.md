@@ -1,2 +1,2 @@
 # java-school-core
-Repo for the core module of our java school
+Exercise for the core module of our java school
