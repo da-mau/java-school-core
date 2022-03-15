@@ -17,7 +17,7 @@ public class MainHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) {
         String httpMethod = httpExchange.getRequestMethod();
         RequestHandler handler;
-        boolean badRequest = false;
+        boolean validRequest = true;
         try {
             switch (httpMethod) {
                 case "GET":
@@ -33,13 +33,14 @@ public class MainHandler implements HttpHandler {
                     handler = new DeleteRequestHandler();
                     break;
                 default:
+                    validRequest = false;
                     handler = new PostRequestHandler();
                     break;
             }
-            if (badRequest) {
-                handler.returnBadRequest(httpExchange, "Bad Request");
-            } else {
+            if (validRequest) {
                 handler.handle(httpExchange);
+            } else {
+                handler.returnResponse(httpExchange, RequestHandler.BAD_REQUEST_HTTP_CODE, RequestHandler.BAD_REQUEST);
             }
         } catch (IOException e) {
             e.printStackTrace();

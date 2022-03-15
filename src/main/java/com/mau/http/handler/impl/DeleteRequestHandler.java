@@ -1,13 +1,11 @@
 package com.mau.http.handler.impl;
 
 import com.mau.http.handler.RequestHandler;
+import com.mau.model.EntityRepository;
 import com.mau.model.RandomEntity;
-import com.mau.model.RandomEntityRepository;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,28 +16,22 @@ public class DeleteRequestHandler extends RequestHandler {
         Map<String, Object> parameters = new HashMap<String, Object>();
         URI requestedUri = httpExchange.getRequestURI();
         String[] segments = requestedUri.getPath().split("/");
-        String pathId = segments[segments.length-1];
-        int responseLength;
-        int responseCode;
         try {
-            Map<Integer, RandomEntity> repo = RandomEntityRepository.getRandomEntityRepo();
-            int id =  Integer.parseInt(pathId);
-            if (repo.containsKey(id)) {
-                repo.remove(id);
-                responseCode = 204;
-                responseLength = -1;
+            String pathId = segments[segments.length - 1];
+            EntityRepository repo = EntityRepository.INSTANCE;
+            Map<Integer, RandomEntity> records = repo.getRecords();
+            int id = Integer.parseInt(pathId);
+            if (records.containsKey(id)) {
+                records.remove(id);
+                responseCode = RequestHandler.NO_CONTENT_HTTP_CODE;
             } else {
-                responseCode = 404;
-                responseLength = 0;
+                responseCode = RequestHandler.NOT_FOUND_HTTP_CODE;
             }
-            // send response
-            httpExchange.sendResponseHeaders(responseCode, responseLength);
-            OutputStream os = httpExchange.getResponseBody();
-            os.close();
-        } catch (UnsupportedEncodingException e) {
-            //Ideally we should log the exception here before returning the bad request response
-            returnBadRequest(httpExchange, "Bad Request");
+        } catch (NumberFormatException ex) {
+            responseCode = RequestHandler.BAD_REQUEST_HTTP_CODE;
+            response = null;
         }
-
+        // send response
+        returnResponse(httpExchange, responseCode, null);
     }
 }

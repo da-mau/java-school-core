@@ -1,8 +1,8 @@
 package com.mau.http.handler.impl;
 
 import com.mau.http.handler.RequestHandler;
+import com.mau.model.EntityRepository;
 import com.mau.model.RandomEntity;
-import com.mau.model.RandomEntityRepository;
 import com.mau.util.InputParser;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -21,32 +21,30 @@ public class PutRequestHandler extends RequestHandler {
         InputStreamReader isr = new InputStreamReader(httpExchange.getRequestBody(), "utf-8");
         BufferedReader br = new BufferedReader(isr);
         String query = br.readLine();
-        String response = "";
-        int responseCode = 0;
         try {
             InputParser.parseQuery(query, parameters);
-            Map<Integer, RandomEntity> repo = RandomEntityRepository.getRandomEntityRepo();
+            EntityRepository repo  = EntityRepository.INSTANCE;
+            Map<Integer, RandomEntity> records = repo.getRecords();
             int id =  Integer.parseInt(pathId);
             String name = (String) parameters.get("name");
-            if(repo.containsKey(id)){
-                responseCode = 200;
+            if(records.containsKey(id)){
+                responseCode = RequestHandler.SUCCESS_HTTP_CODE;
             }else{
-                responseCode = 201;
+                responseCode = RequestHandler.CREATED_HTTP_CODE;
             }
-            RandomEntity aux = repo.get(id);
+            RandomEntity aux = records.get(id);
             aux = new RandomEntity(id, name);
-            repo.put(id, aux);
+            records.put(id, aux);
             String path = httpExchange.getHttpContext().getPath();
             httpExchange.getResponseHeaders().add("Location", path +"/" + id);
-            httpExchange.sendResponseHeaders(responseCode, response.length());
-            // send response
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.toString().getBytes());
-            os.close();
+
         } catch (UnsupportedEncodingException e) {
             //Ideally we should log the exception here before returning the bad request response
-            returnBadRequest(httpExchange, "Bad Request");
+            returnResponse(httpExchange, RequestHandler.BAD_REQUEST_HTTP_CODE,RequestHandler.BAD_REQUEST);
+        }catch(NumberFormatException e){
+            responseCode = RequestHandler.BAD_REQUEST_HTTP_CODE;
+            response = null;
         }
-
+        returnResponse(httpExchange, responseCode, response);
     }
 }
