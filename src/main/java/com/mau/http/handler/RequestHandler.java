@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 
 public abstract class RequestHandler {
     public static final int BAD_REQUEST_HTTP_CODE = 400;
@@ -30,6 +31,6 @@ public abstract class RequestHandler {
 
     }
 
-    protected abstract void  handle(HttpExchange httpExchange) throws IOException ;
+    protected abstract void  handle(HttpExchange httpExchange) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, InstantiationException;
 
 }

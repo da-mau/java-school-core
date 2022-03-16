@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class MainHandler implements HttpHandler {
     /**
@@ -43,6 +44,16 @@ public class MainHandler implements HttpHandler {
                 handler.returnResponse(httpExchange, RequestHandler.BAD_REQUEST_HTTP_CODE, RequestHandler.BAD_REQUEST);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
             e.printStackTrace();
         }
     }
