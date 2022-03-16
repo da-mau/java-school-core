@@ -3,11 +3,14 @@ package com.mau.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This was originally done by Ycaceres retrieved from :
+ * https://github.com/ycaceres/JavaSchoolReflection/blob/master/main/src/com/nearsoft/javaschool/reflection/example/serializer/JsonSerializer.java
+ */
 public class JsonSerializer {
     public static <T> String serialize(T source) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Class objectClass = source.getClass();
