@@ -1,5 +1,6 @@
 package com.mau.http.handler;
 
+import com.mau.context.annotation.Component;
 import com.mau.http.handler.impl.DeleteRequestHandler;
 import com.mau.http.handler.impl.GetRequestHandler;
 import com.mau.http.handler.impl.PostRequestHandler;
@@ -9,13 +10,14 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-
+@Component
 public class MainHandler implements HttpHandler {
     /**
      * Handles http requests
      */
     @Override
     public void handle(HttpExchange httpExchange) {
+        String uri = httpExchange.getRequestURI().toString();
         String httpMethod = httpExchange.getRequestMethod();
         RequestHandler handler;
         boolean validRequest = true;
