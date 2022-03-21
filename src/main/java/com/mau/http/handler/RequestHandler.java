@@ -4,9 +4,8 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 
-public abstract class RequestHandler {
+public class RequestHandler {
     public static final int BAD_REQUEST_HTTP_CODE = 400;
     public static final int SUCCESS_HTTP_CODE = 200;
     public static final int CREATED_HTTP_CODE = 201;
@@ -20,7 +19,7 @@ public abstract class RequestHandler {
     /**
      * Returns bad request message.
      */
-    protected void returnResponse(HttpExchange httpExchange, int responseCode, String result) throws IOException {
+    public static void returnResponse(HttpExchange httpExchange, int responseCode, String result) throws IOException {
         int responseLength = result != null ? result.length() : -1;
         httpExchange.sendResponseHeaders(responseCode, responseLength);
         OutputStream outputStream = httpExchange.getResponseBody();
@@ -31,6 +30,5 @@ public abstract class RequestHandler {
 
     }
 
-    protected abstract void  handle(HttpExchange httpExchange) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, InstantiationException;
 
 }

@@ -1,7 +1,7 @@
 package com.mau.http.handler.impl;
 
 import com.mau.http.handler.RequestHandler;
-import com.mau.model.EntityRepository;
+import com.mau.repository.EntityStorage;
 import com.mau.model.RandomEntity;
 import com.mau.util.JsonSerializer;
 import com.sun.net.httpserver.HttpExchange;
@@ -20,7 +20,7 @@ public class GetRequestHandler extends RequestHandler {
         URI requestedUri = httpExchange.getRequestURI();
         String[] segments = requestedUri.getPath().split("/");
         String pathId = segments[segments.length - 1];
-        EntityRepository repo = EntityRepository.INSTANCE;
+        EntityStorage repo = EntityStorage.INSTANCE;
         Map<Integer, RandomEntity> records = repo.getRecords();
         try {
             int id = Integer.parseInt(pathId);

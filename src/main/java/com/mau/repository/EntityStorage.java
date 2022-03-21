@@ -1,14 +1,16 @@
-package com.mau.model;
+package com.mau.repository;
+
+import com.mau.model.RandomEntity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum EntityRepository {
+public enum EntityStorage {
     INSTANCE;
 
     Map<Integer, RandomEntity> records;
 
-    EntityRepository(){
+    EntityStorage(){
         records = new HashMap<Integer, RandomEntity>();
     }
 
@@ -16,7 +18,4 @@ public enum EntityRepository {
         return records;
     }
 
-    public void setRecords(Map<Integer, RandomEntity> records) {
-        this.records = records;
-    }
 }
